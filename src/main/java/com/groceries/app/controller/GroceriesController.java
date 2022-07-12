@@ -16,7 +16,7 @@ import com.groceries.app.exception.GroceriesException;
 import com.groceries.app.service.GroceriesService;
 
 @RestController
-public class GroceriesController { 
+public class GroceriesController {
 
 	public static final Logger logger = LoggerFactory.getLogger(GroceriesController.class);
 
