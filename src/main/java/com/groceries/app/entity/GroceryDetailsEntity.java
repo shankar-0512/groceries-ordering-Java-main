@@ -32,4 +32,8 @@ public class GroceryDetailsEntity {
 	
 	@Column(name="stock_available")
 	private Integer stockAvailable;
+	
+	@Column(name="category_id")
+	private Integer categoryId;
+	
 }

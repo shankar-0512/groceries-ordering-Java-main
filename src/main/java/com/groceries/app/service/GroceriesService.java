@@ -10,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.groceries.app.constants.AppConstants;
 import com.groceries.app.constants.ErrorConstants;
+import com.groceries.app.dto.GroceriesRequestDTO;
 import com.groceries.app.dto.GroceriesResponseDTO;
 import com.groceries.app.entity.GroceryDetailsEntity;
 import com.groceries.app.exception.GroceriesException;
+import com.groceries.app.repo.CategoryDetailsRepo;
 import com.groceries.app.repo.GroceryDetailsRepo;
 
 @Service
@@ -22,16 +25,24 @@ public class GroceriesService {
 	@Autowired
 	GroceryDetailsRepo groceryDetailsRepo;
 
+	@Autowired
+	CategoryDetailsRepo categoryDetailsRepo;
+
 	static final Logger logger = LoggerFactory.getLogger(GroceriesService.class);
 
-	public List<GroceriesResponseDTO> fetchGroceries() throws GroceriesException {
+	public List<GroceriesResponseDTO> fetchGroceries(GroceriesRequestDTO groceriesRequest) throws GroceriesException {
 
 		List<GroceryDetailsEntity> groceryEntityList = new ArrayList<>();
 		List<GroceriesResponseDTO> groceriesResponseList = new ArrayList<>();
 
 		try {
 
-			groceryEntityList = groceryDetailsRepo.findAll();
+			if (groceriesRequest.getCategory().equals(AppConstants.EMPTY_STR)) {
+				groceryEntityList = groceryDetailsRepo.findAll();
+			} else {
+				Integer categoryId = categoryDetailsRepo.findByCategoryName(groceriesRequest.getCategory());
+				groceryEntityList = groceryDetailsRepo.findByCategory(categoryId);
+			}
 
 			for (GroceryDetailsEntity entity : groceryEntityList) {
 

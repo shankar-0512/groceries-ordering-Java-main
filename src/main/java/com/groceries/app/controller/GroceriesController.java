@@ -7,9 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.groceries.app.constants.URIConstants;
+import com.groceries.app.dto.GroceriesRequestDTO;
 import com.groceries.app.dto.GroceriesResponseDTO;
 import com.groceries.app.constants.ErrorConstants;
 import com.groceries.app.exception.GroceriesException;
@@ -24,11 +26,11 @@ public class GroceriesController {
 	GroceriesService groceriesService;
 
 	@PostMapping(URIConstants.FETCH_GROCERIES)
-	public List<GroceriesResponseDTO> fetchGroceries() {
+	public List<GroceriesResponseDTO> fetchGroceries(@RequestBody GroceriesRequestDTO groceriesRequest) {
 
 		List<GroceriesResponseDTO> groceriesResponse = new ArrayList<>();
 		try {
-			groceriesResponse = groceriesService.fetchGroceries();
+			groceriesResponse = groceriesService.fetchGroceries(groceriesRequest);
 		} catch (GroceriesException ex) {
 			logger.error(ErrorConstants.FETCH_GROCERIES_ERROR);
 		}
