@@ -12,7 +12,7 @@ import com.groceries.app.entity.GroceryDetailsEntity;
 @Repository
 public interface GroceryDetailsRepo extends JpaRepository<GroceryDetailsEntity, Integer> {
 	
-	@Query(value = "select * from groceries.grocery_details where category_id=:categoryId", nativeQuery = true)
+	@Query(value = "select * from public.grocery_details where category_id=:categoryId", nativeQuery = true)
 	List<GroceryDetailsEntity> findByCategory(@Param("categoryId") Integer categoryId);
 
 }

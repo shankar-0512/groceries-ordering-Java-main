@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="category_details", schema="groceries")
+@Table(name="category_details", schema="public")
 public class CategoryDetailsEntity {
 	
 	@Id
