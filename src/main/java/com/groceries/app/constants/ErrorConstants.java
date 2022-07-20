@@ -23,6 +23,7 @@ public class ErrorConstants {
 	
 	//Response or Logger messages
 	public static final String FETCH_GROCERIES_ERROR = "FETCH_GROCERIES_ERROR";
+	public static final String ORDER_GROCERIES_ERROR = "ORDER_GROCERIES_ERROR";
 	
 	
 

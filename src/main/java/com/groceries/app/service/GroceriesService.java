@@ -12,12 +12,19 @@ import org.springframework.stereotype.Service;
 
 import com.groceries.app.constants.AppConstants;
 import com.groceries.app.constants.ErrorConstants;
+import com.groceries.app.dto.CommonResponseDTO;
 import com.groceries.app.dto.GroceriesRequestDTO;
 import com.groceries.app.dto.GroceriesResponseDTO;
+import com.groceries.app.dto.OrderGroceriesRequestDTO;
+import com.groceries.app.dto.OrderedItemsDTO;
 import com.groceries.app.entity.GroceryDetailsEntity;
+import com.groceries.app.entity.OrderGroceryDetailsEntity;
+import com.groceries.app.entity.OrderUserDetailsEntity;
 import com.groceries.app.exception.GroceriesException;
 import com.groceries.app.repo.CategoryDetailsRepo;
 import com.groceries.app.repo.GroceryDetailsRepo;
+import com.groceries.app.repo.OrderGroceryDetailsRepo;
+import com.groceries.app.repo.OrderUserDetailsRepo;
 
 @Service
 public class GroceriesService {
@@ -27,6 +34,12 @@ public class GroceriesService {
 
 	@Autowired
 	CategoryDetailsRepo categoryDetailsRepo;
+
+	@Autowired
+	OrderUserDetailsRepo orderuserDetailsRepo;
+	
+	@Autowired
+	OrderGroceryDetailsRepo orderGroceryDetailsRepo;
 
 	static final Logger logger = LoggerFactory.getLogger(GroceriesService.class);
 
@@ -62,6 +75,43 @@ public class GroceriesService {
 		}
 
 		return groceriesResponseList;
+	}
+
+	public CommonResponseDTO orderGroceries(OrderGroceriesRequestDTO orderGroceriesRequest) throws GroceriesException {
+
+		CommonResponseDTO orderResponse = new CommonResponseDTO();
+		OrderUserDetailsEntity orderDetails = new OrderUserDetailsEntity();
+		List<OrderGroceryDetailsEntity> groceryDetailList = new ArrayList<>();
+		try {
+
+			orderDetails.setUserName(orderGroceriesRequest.getUserDetails().getName());
+			orderDetails.setStreet(orderGroceriesRequest.getUserDetails().getStreet());
+			orderDetails.setCity(orderGroceriesRequest.getUserDetails().getCity());
+			orderDetails.setPostalCode(orderGroceriesRequest.getUserDetails().getPostalCode());
+
+			orderDetails = orderuserDetailsRepo.save(orderDetails);
+			
+			for(OrderedItemsDTO grocery : orderGroceriesRequest.getOrderedItems()) {
+				
+				OrderGroceryDetailsEntity groceryDetail = new OrderGroceryDetailsEntity();
+				groceryDetail.setOrderId(orderDetails.getOrderId());
+				groceryDetail.setGroceryId(grocery.getId());
+				groceryDetail.setGroceryName(grocery.getName());
+				groceryDetail.setPrice(grocery.getPrice());
+				groceryDetail.setQuantity(grocery.getAmount());
+				
+				groceryDetailList.add(groceryDetail);
+			}
+			
+			orderGroceryDetailsRepo.saveAll(groceryDetailList);
+
+		} catch (DataAccessException | PersistenceException e) {
+			logger.error(ErrorConstants.ORDER_GROCERIES_ERROR);
+			throw new GroceriesException(ErrorConstants.ORDER_GROCERIES_ERROR);
+
+		}
+
+		return orderResponse;
 	}
 
 }

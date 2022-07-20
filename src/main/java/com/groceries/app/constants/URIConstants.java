@@ -7,5 +7,6 @@ public class URIConstants {
 	}
 	
 	public static final String FETCH_GROCERIES = "/api/protected/fetchGroceries";
+	public static final String ORDER_GROCERIES = "/api/protected/orderGroceries";
 
 }

@@ -11,9 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.groceries.app.constants.URIConstants;
+import com.groceries.app.dto.CommonResponseDTO;
 import com.groceries.app.dto.GroceriesRequestDTO;
 import com.groceries.app.dto.GroceriesResponseDTO;
+import com.groceries.app.dto.OrderGroceriesRequestDTO;
+import com.groceries.app.constants.AppConstants;
 import com.groceries.app.constants.ErrorConstants;
+import com.groceries.app.constants.SuccessConstants;
 import com.groceries.app.exception.GroceriesException;
 import com.groceries.app.service.GroceriesService;
 
@@ -35,6 +39,22 @@ public class GroceriesController {
 			logger.error(ErrorConstants.FETCH_GROCERIES_ERROR);
 		}
 		return groceriesResponse;
+	}
+	
+	@PostMapping(URIConstants.ORDER_GROCERIES)
+	public CommonResponseDTO orderGroceries(@RequestBody OrderGroceriesRequestDTO orderGroceriesRequest) {
+
+		CommonResponseDTO orderGroceriesResponse = new CommonResponseDTO();
+		try {
+			orderGroceriesResponse = groceriesService.orderGroceries(orderGroceriesRequest);
+			orderGroceriesResponse.setResponseCode(AppConstants.SUCCESS_CODE_0);
+			orderGroceriesResponse.setResponseMessage(SuccessConstants.ORDER_GROCERIES_SUCCESS);
+		} catch (GroceriesException ex) {
+			logger.error(ErrorConstants.ORDER_GROCERIES_ERROR);
+			orderGroceriesResponse.setResponseCode(AppConstants.FAILURE_CODE_1);
+			orderGroceriesResponse.setResponseMessage(ErrorConstants.ORDER_GROCERIES_ERROR);
+		}
+		return orderGroceriesResponse;
 	}
 
 }
