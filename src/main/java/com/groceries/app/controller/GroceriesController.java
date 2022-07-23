@@ -14,6 +14,7 @@ import com.groceries.app.constants.URIConstants;
 import com.groceries.app.dto.CommonResponseDTO;
 import com.groceries.app.dto.GroceriesRequestDTO;
 import com.groceries.app.dto.GroceriesResponseDTO;
+import com.groceries.app.dto.LoginDTO;
 import com.groceries.app.dto.OrderGroceriesRequestDTO;
 import com.groceries.app.constants.AppConstants;
 import com.groceries.app.constants.ErrorConstants;
@@ -28,6 +29,23 @@ public class GroceriesController {
 
 	@Autowired
 	GroceriesService groceriesService;
+	
+	@PostMapping(URIConstants.LOGIN_AUTH)
+	public CommonResponseDTO loginAuth(@RequestBody LoginDTO loginRequest) {
+
+		CommonResponseDTO loginResponse = new CommonResponseDTO();
+		try {
+			if (loginRequest.getSignUpF().equals(AppConstants.N_STR)) {
+				loginResponse = groceriesService.loginAuth(loginRequest);
+			} else if (loginRequest.getSignUpF().equals(AppConstants.Y_STR)) {
+				loginResponse = groceriesService.signUpAuth(loginRequest);
+			}
+		} catch (GroceriesException ex) {
+			logger.error(ErrorConstants.LOGIN_AUTH_ERROR);
+		}
+
+		return loginResponse;
+	}
 
 	@PostMapping(URIConstants.FETCH_GROCERIES)
 	public List<GroceriesResponseDTO> fetchGroceries(@RequestBody GroceriesRequestDTO groceriesRequest) {

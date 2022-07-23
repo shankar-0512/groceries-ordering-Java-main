@@ -22,6 +22,8 @@ public class ErrorConstants {
 	public static final String PASSWORD_CHANGED_SUCCESSFULLY = "YOUR PASSWORD HAS BEEN CHANGED SUCCESSFULLY.";
 	
 	//Response or Logger messages
+	public static final String LOGIN_AUTH_ERROR = "LOGIN_AUTH_ERROR";
+	public static final String SIGNUP_ERROR = "SIGNUP_ERROR";
 	public static final String FETCH_GROCERIES_ERROR = "FETCH_GROCERIES_ERROR";
 	public static final String ORDER_GROCERIES_ERROR = "ORDER_GROCERIES_ERROR";
 	
