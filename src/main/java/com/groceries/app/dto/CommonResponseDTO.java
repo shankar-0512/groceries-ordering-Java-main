@@ -13,6 +13,5 @@ public class CommonResponseDTO {
 	Integer responseCode;
 	@Valid
 	String responseMessage;
-	String userId;
 
 }

@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.groceries.app.constants.URIConstants;
 import com.groceries.app.dto.CommonResponseDTO;
+import com.groceries.app.dto.FetchProfileRequestDTO;
+import com.groceries.app.dto.FetchProfileResponseDTO;
 import com.groceries.app.dto.GroceriesRequestDTO;
 import com.groceries.app.dto.GroceriesResponseDTO;
 import com.groceries.app.dto.LoginDTO;
+import com.groceries.app.dto.LoginResponseDTO;
 import com.groceries.app.dto.OrderGroceriesRequestDTO;
 import com.groceries.app.constants.AppConstants;
 import com.groceries.app.constants.ErrorConstants;
@@ -31,9 +34,9 @@ public class GroceriesController {
 	GroceriesService groceriesService;
 	
 	@PostMapping(URIConstants.LOGIN_AUTH)
-	public CommonResponseDTO loginAuth(@RequestBody LoginDTO loginRequest) {
+	public LoginResponseDTO loginAuth(@RequestBody LoginDTO loginRequest) {
 
-		CommonResponseDTO loginResponse = new CommonResponseDTO();
+		LoginResponseDTO loginResponse = new LoginResponseDTO();
 		try {
 			if (loginRequest.getSignUpF().equals(AppConstants.N_STR)) {
 				loginResponse = groceriesService.loginAuth(loginRequest);
@@ -73,6 +76,22 @@ public class GroceriesController {
 			orderGroceriesResponse.setResponseMessage(ErrorConstants.ORDER_GROCERIES_ERROR);
 		}
 		return orderGroceriesResponse;
+	}
+	
+	@PostMapping(URIConstants.FETCH_PROFILE)
+	public FetchProfileResponseDTO fetchProfile(@RequestBody FetchProfileRequestDTO fetchProfileRequest) {
+
+		FetchProfileResponseDTO fetchProfileResponse = new FetchProfileResponseDTO();
+		try {
+			fetchProfileResponse = groceriesService.fetchProfile(fetchProfileRequest);
+			fetchProfileResponse.setResponseCode(AppConstants.SUCCESS_CODE_0);
+			fetchProfileResponse.setResponseMessage(SuccessConstants.FETCH_PROFILE_SUCCESS);
+		} catch (GroceriesException ex) {
+			logger.error(ErrorConstants.FETCH_PROFILE_ERROR);
+			fetchProfileResponse.setResponseCode(AppConstants.FAILURE_CODE_1);
+			fetchProfileResponse.setResponseMessage(ErrorConstants.FETCH_PROFILE_ERROR);
+		}
+		return fetchProfileResponse;
 	}
 
 }

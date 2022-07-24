@@ -24,13 +24,7 @@ public class OrderUserDetailsEntity {
 	@Column(name="user_name")
 	private String userName;
 	
-	@Column(name="street")
-	private String street;
-	
-	@Column(name="city")
-	private String city;
-	
-	@Column(name="postal_code")
-	private String postalCode;
+	@Column(name="address")
+	private String address;
 
 }

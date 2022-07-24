@@ -14,9 +14,12 @@ import com.groceries.app.constants.AppConstants;
 import com.groceries.app.constants.ErrorConstants;
 import com.groceries.app.constants.SuccessConstants;
 import com.groceries.app.dto.CommonResponseDTO;
+import com.groceries.app.dto.FetchProfileRequestDTO;
+import com.groceries.app.dto.FetchProfileResponseDTO;
 import com.groceries.app.dto.GroceriesRequestDTO;
 import com.groceries.app.dto.GroceriesResponseDTO;
 import com.groceries.app.dto.LoginDTO;
+import com.groceries.app.dto.LoginResponseDTO;
 import com.groceries.app.dto.OrderGroceriesRequestDTO;
 import com.groceries.app.dto.OrderedItemsDTO;
 import com.groceries.app.entity.GroceryDetailsEntity;
@@ -32,7 +35,7 @@ import com.groceries.app.repo.UserDetailsRepo;
 
 @Service
 public class GroceriesService {
-	
+
 	@Autowired
 	UserDetailsRepo userDetailsRepo;
 
@@ -44,15 +47,15 @@ public class GroceriesService {
 
 	@Autowired
 	OrderUserDetailsRepo orderuserDetailsRepo;
-	
+
 	@Autowired
 	OrderGroceryDetailsRepo orderGroceryDetailsRepo;
 
 	static final Logger logger = LoggerFactory.getLogger(GroceriesService.class);
-	
-	public CommonResponseDTO loginAuth(LoginDTO loginRequest) throws GroceriesException {
 
-		CommonResponseDTO loginResponse = new CommonResponseDTO();
+	public LoginResponseDTO loginAuth(LoginDTO loginRequest) throws GroceriesException {
+
+		LoginResponseDTO loginResponse = new LoginResponseDTO();
 		UserDetailsEntity userEntity = new UserDetailsEntity();
 		try {
 
@@ -69,6 +72,8 @@ public class GroceriesService {
 				loginResponse.setResponseCode(AppConstants.SUCCESS_CODE_0);
 				loginResponse.setResponseMessage(SuccessConstants.LOGIN_SUCCESSFUL);
 				loginResponse.setUserId(userEntity.getUserEmail());
+				loginResponse.setUserName(userEntity.getUserName());
+				loginResponse.setUserAddress(userEntity.getAddress());
 				return loginResponse;
 			}
 
@@ -78,9 +83,9 @@ public class GroceriesService {
 		}
 	}
 
-	public CommonResponseDTO signUpAuth(LoginDTO signUpRequest) throws GroceriesException {
+	public LoginResponseDTO signUpAuth(LoginDTO signUpRequest) throws GroceriesException {
 
-		CommonResponseDTO signUpResponse = new CommonResponseDTO();
+		LoginResponseDTO signUpResponse = new LoginResponseDTO();
 		UserDetailsEntity userEntity = new UserDetailsEntity();
 		UserDetailsEntity userExistsCheck = new UserDetailsEntity();
 		try {
@@ -159,24 +164,22 @@ public class GroceriesService {
 		try {
 
 			orderDetails.setUserName(orderGroceriesRequest.getUserDetails().getName());
-			orderDetails.setStreet(orderGroceriesRequest.getUserDetails().getStreet());
-			orderDetails.setCity(orderGroceriesRequest.getUserDetails().getCity());
-			orderDetails.setPostalCode(orderGroceriesRequest.getUserDetails().getPostalCode());
+			orderDetails.setAddress(orderGroceriesRequest.getUserDetails().getAddress());
 
 			orderDetails = orderuserDetailsRepo.save(orderDetails);
-			
-			for(OrderedItemsDTO grocery : orderGroceriesRequest.getOrderedItems()) {
-				
+
+			for (OrderedItemsDTO grocery : orderGroceriesRequest.getOrderedItems()) {
+
 				OrderGroceryDetailsEntity groceryDetail = new OrderGroceryDetailsEntity();
 				groceryDetail.setOrderId(orderDetails.getOrderId());
 				groceryDetail.setGroceryId(grocery.getId());
 				groceryDetail.setGroceryName(grocery.getName());
 				groceryDetail.setPrice(grocery.getPrice());
 				groceryDetail.setQuantity(grocery.getAmount());
-				
+
 				groceryDetailList.add(groceryDetail);
 			}
-			
+
 			orderGroceryDetailsRepo.saveAll(groceryDetailList);
 
 		} catch (DataAccessException | PersistenceException e) {
@@ -186,6 +189,22 @@ public class GroceriesService {
 		}
 
 		return orderResponse;
+	}
+
+	public FetchProfileResponseDTO fetchProfile(FetchProfileRequestDTO fetchProfileRequest) throws GroceriesException {
+		FetchProfileResponseDTO profileResponse = new FetchProfileResponseDTO();
+		UserDetailsEntity userDetail = new UserDetailsEntity();
+		try {
+
+			userDetail = userDetailsRepo.findByUserEmail(fetchProfileRequest.getUserEmail());
+			profileResponse.setUserName(userDetail.getUserName());
+			profileResponse.setUserAddress(userDetail.getAddress());
+
+		} catch (DataAccessException | PersistenceException e) {
+			logger.error(ErrorConstants.FETCH_PROFILE_ERROR);
+			throw new GroceriesException(ErrorConstants.FETCH_PROFILE_ERROR);
+		}
+		return profileResponse;
 	}
 
 }

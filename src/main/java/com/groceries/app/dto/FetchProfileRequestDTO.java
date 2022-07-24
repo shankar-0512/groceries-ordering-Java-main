@@ -5,9 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserDetailsDTO {
+public class FetchProfileRequestDTO {
 	
-	String name;
-	String address;
+	String userEmail;
 
 }

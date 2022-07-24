@@ -26,6 +26,7 @@ public class ErrorConstants {
 	public static final String SIGNUP_ERROR = "SIGNUP_ERROR";
 	public static final String FETCH_GROCERIES_ERROR = "FETCH_GROCERIES_ERROR";
 	public static final String ORDER_GROCERIES_ERROR = "ORDER_GROCERIES_ERROR";
+	public static final String FETCH_PROFILE_ERROR = "FETCH_PROFILE_ERROR";
 	
 	
 
