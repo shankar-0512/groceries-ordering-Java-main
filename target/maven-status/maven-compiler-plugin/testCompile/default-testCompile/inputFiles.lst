@@ -1,4 +1,2 @@
-D:\Eclipse_Projects\space-ticket-booking-Java-main\space-ticket-booking-Java-main\src\test\java\com\space\app\mockedRequest\MockedRequest.java
-D:\Eclipse_Projects\space-ticket-booking-Java-main\space-ticket-booking-Java-main\src\test\java\com\space\app\service\SpaceServiceTest.java
-D:\Eclipse_Projects\space-ticket-booking-Java-main\space-ticket-booking-Java-main\src\test\java\com\space\app\mockedResponse\RepoResponse.java
-D:\Eclipse_Projects\space-ticket-booking-Java-main\space-ticket-booking-Java-main\src\test\java\com\space\app\web\SpaceControllerTest.java
+/Users/shankarnarayanan/Documents/GitHub/groceries-ordering-Java-main/src/test/java/com/groceries/app/mockedRequest/MockedRequest.java
+/Users/shankarnarayanan/Documents/GitHub/groceries-ordering-Java-main/src/test/java/com/groceries/app/mockedResponse/RepoResponse.java
